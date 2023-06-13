@@ -21,6 +21,7 @@ const News = (props) => {
   }, []);
 
   const updatePage = async () => {
+    setLoading(true);
     props.setProgress(10);
     setPage(page + 1);
     let data = await fetch(`https://newsapi.org/v2/top-headlines?country=${props.country}&category=${props.category}&apiKey=${props.apiKey}&page=${page}&pagesize=${props.pagesize}`);
@@ -41,6 +42,7 @@ const News = (props) => {
   //   this.setState({page: page-1})
   //   this.updatePage(page-1);
   const fetchData = async () => {
+    setLoading(true);
     let data = await fetch(`https://newsapi.org/v2/top-headlines?country=${props.country}&category=${props.category}&apiKey=${props.apiKey}&page=${page + 1}&pagesize=${props.pagesize}`);
     setPage(page + 1);
     let parsedData = await data.json();
@@ -54,7 +56,7 @@ const News = (props) => {
       <h2 className='text-center my-2'>News-Monkey {capitalizeFirstLetter(props.category)} Top Headlines</h2>
       {loading && <Spinner />}
       <InfiniteScroll dataLength={articles.length} next={fetchData}
-        hasMore={articles.length < totalarticles} loader={<Spinner />}>
+        hasMore={articles.length < totalarticles} loader={loading && <Spinner />}>
         <div className='container my-3'>
           <div className="row">
             {articles.map((element) => {
